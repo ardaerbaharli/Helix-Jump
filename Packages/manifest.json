@@ -3,6 +3,7 @@
     "com.ardaerbaharli.tools": "https://github.com/ardaerbaharli/UnityTools.git",
     "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
     "com.unity.2d.sprite": "1.0.0",
+    "com.unity.ads": "4.3.0",
     "com.unity.collab-proxy": "1.15.15",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.13",
