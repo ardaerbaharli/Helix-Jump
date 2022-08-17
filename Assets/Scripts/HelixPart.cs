@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using Utilities;

@@ -6,13 +6,17 @@ public class PlayerController : MonoBehaviour
     public Helix activeHelix;
     private float moveX;
     private Vector3 lastTapPos;
-    public bool didSuperSpeedCollideHappened;
 
 
     private void Update()
     {
         if (GameManager.instance.State != GameState.Playing) return;
-        if (didSuperSpeedCollideHappened) return;
+        if (activeHelix.didBlewUp)
+        {
+            lastTapPos = Vector3.zero;
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             var curTapPos = Input.mousePosition;
@@ -31,11 +35,5 @@ public class PlayerController : MonoBehaviour
         {
             lastTapPos = Vector3.zero;
         }
-    }
-
-    public void SuperSpeedCollision()
-    {
-        didSuperSpeedCollideHappened = true;
-        activeHelix.BlowUp();
     }
 }

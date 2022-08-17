@@ -19,11 +19,13 @@ namespace UI
 
         private void OnSoundToggleValueChanged(bool value)
         {
+            SoundManager.instance.PlayUiClick();
             Config.IsSoundOn = value;
         }
 
         private void OnVibrationToggleValueChanged(bool value)
         {
+            SoundManager.instance.PlayUiClick();
             Config.IsVibrationOn = value;
         }
 

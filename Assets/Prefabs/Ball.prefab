@@ -98,7 +98,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.44
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6861047765191830113
 MonoBehaviour:
@@ -113,11 +113,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpSpeed: 5
-  ballMaterial: {fileID: 0}
-  trailMaterial: {fileID: 0}
+  ballRenderer: {fileID: 0}
+  trailRenderer: {fileID: 0}
+  light: {fileID: 0}
   didTouchGroundAfterScoring: 0
   lastTouchedLevel: 0
-  isSuperSpeed: 0
 --- !u!54 &6861047765191830112
 Rigidbody:
   m_ObjectHideFlags: 0

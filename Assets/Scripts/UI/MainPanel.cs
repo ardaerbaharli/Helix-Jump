@@ -7,12 +7,14 @@ namespace UI
     {
         public void StartGame()
         {
+            SoundManager.instance.PlayUiClick();
             GameManager.instance.StartGame();
             PageController.Instance.ShowPage(Pages.Game);
         }
 
         public void Settings()
         {
+            SoundManager.instance.PlayUiClick();
             PageController.Instance.ShowPage(Pages.Settings);
         }
     }

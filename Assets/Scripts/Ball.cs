@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,15 +6,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private float jumpSpeed;
     [SerializeField] private MeshRenderer ballRenderer;
     [SerializeField] private TrailRenderer trailRenderer;
-
-    [SerializeField] private Material ballMaterial;
-    [SerializeField] private Material trailMaterial;
-    [SerializeField] private Material ballSuperSpeedMaterial;
-    [SerializeField] private Material trailSuperSpeedMaterial;
     [SerializeField] private Light light;
-    [SerializeField] private Color lightNormalColor;
-    [SerializeField] private Color lightSuperSpeedColor;
-
 
     public bool didTouchGroundAfterScoring;
     public int lastTouchedLevel;
@@ -27,32 +18,31 @@ public class Ball : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
-    private void Start()
-    {
-        GameManager.instance.OnGameOver += () => Destroy(gameObject);
-    }
-
+    
 
     public void ToggleSuperSpeed(bool value)
     {
         isSuperSpeed = value;
-        ballRenderer.material = isSuperSpeed ? ballSuperSpeedMaterial : ballMaterial;
-        trailRenderer.material = isSuperSpeed ? trailSuperSpeedMaterial : trailMaterial;
-        light.color = isSuperSpeed ? lightSuperSpeedColor : lightNormalColor;
+        var mats = LevelDesign.instance.GetBallMaterials(value);
+        ballRenderer.material = (Material) mats[0];
+        trailRenderer.material = (Material) mats[1];
+        light.color = (Color) mats[2];
     }
 
     private IEnumerator Jump()
     {
+        SoundManager.instance.PlayBallJump();
         rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         isJumping = false;
     }
 
-    private void OnTriggerEnter(Collider collision)
+
+    private void OnTriggerEnter(Collider c)
     {
-        if (collision.transform.parent.CompareTag("HelixPart") && !isJumping)
+        if (c.transform.parent.CompareTag("HelixPart") && !isJumping)
         {
             isJumping = true;
             didTouchGroundAfterScoring = true;
@@ -66,7 +56,7 @@ public class Ball : MonoBehaviour
                 GameManager.instance.SuperSpeedCollision();
             }
         }
-        else if (collision.transform.CompareTag("Helix"))
+        else if (c.transform.CompareTag("Helix"))
         {
             didTouchGroundAfterScoring = false;
             ScoreManager.instance.Score++;
