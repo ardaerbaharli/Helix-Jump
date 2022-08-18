@@ -8,14 +8,18 @@ public class HelixPart : MonoBehaviour
     [MinMaxSlider(5f, 20f)] public Vector2 force;
     [MinMaxSlider(5f, 20f)] public Vector2 radius;
     [MinMaxSlider(-3f, 3f)] public Vector2 upwardsModifier;
+    [SerializeField] private Material normalMaterial;
+    [SerializeField] private Material superSpeedBlowUpMaterial;
 
     public PooledObject pooledObject;
     private Rigidbody rb;
     private BoxCollider _boxCollider;
+    private MeshRenderer renderer;
 
     private void OnEnable()
     {
         rb = GetComponent<Rigidbody>();
+        renderer = GetComponent<MeshRenderer>();
         _boxCollider = GetComponentInChildren<BoxCollider>();
         _boxCollider.isTrigger = true;
 
@@ -30,9 +34,16 @@ public class HelixPart : MonoBehaviour
         }
     }
 
+    private bool changedMaterial;
 
-    public void BlowUp()
+    public void BlowUp(bool isSuperSpeed)
     {
+        if (isSuperSpeed)
+        {
+            changedMaterial = true;
+            renderer.material = superSpeedBlowUpMaterial;
+        }
+
         _boxCollider.isTrigger = false;
         var point = new Vector3(0, transform.position.y, 0);
         rb.useGravity = true;
@@ -45,6 +56,8 @@ public class HelixPart : MonoBehaviour
 
     public void SelfDestroy()
     {
+        if (changedMaterial)
+            renderer.material = normalMaterial;
         ObjectPool.instance.TakeBack(pooledObject);
     }
 }

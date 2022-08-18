@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 30;
         deathCount = 0;
 
         if (instance == null)
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         State = GameState.Menu;
         ScoreManager.instance.OnScored += OnScored;
     }
+
 
 
     private void OnScored(int score)
@@ -84,7 +85,7 @@ public class GameManager : MonoBehaviour
     public void SuperSpeedCollision()
     {
         SoundManager.instance.PlayHelixBreak();
-        playerController.activeHelix.BlowUp();
+        playerController.activeHelix.BlowUp(true);
         superSpeedCollisionHappened = true;
         cameraController.isPassiveSpeedOn = false;
     }

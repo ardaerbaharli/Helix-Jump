@@ -146,6 +146,8 @@ MonoBehaviour:
   force: {x: 5, y: 8.623266}
   radius: {x: 5.982737, y: 10.163118}
   upwardsModifier: {x: -0.7860463, y: -0.30222318}
+  normalMaterial: {fileID: 2100000, guid: 78af439a31bb040c397857048719cc5d, type: 2}
+  superSpeedBlowUpMaterial: {fileID: 2100000, guid: 588741f03ad264833814d76ee9098ef3, type: 2}
   pooledObject:
     name: 
     gameObject: {fileID: 0}

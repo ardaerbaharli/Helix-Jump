@@ -18,6 +18,10 @@ namespace Extensions
             }
         }
 
+        public static Queue<T> ToQueue<T>(this IEnumerable<T> collection)
+        {
+            return new Queue<T>(collection);
+        }
 
         public static void ForEach<T>(this IList<T> enumerable, Action<T> action)
         {
@@ -45,7 +49,7 @@ namespace Extensions
             list.RemoveAt(list.Count - 1);
             list.Insert(0, last);
         }
-        
+
         public static bool IsEmpty<T>(this IList<T> list)
         {
             return !(list != null && list.Count > 0);
@@ -62,16 +66,15 @@ namespace Extensions
 
             return true;
         }
-        
+
         public static void RemoveFirst<T>(this IList<T> list)
         {
             list.RemoveAt(0);
         }
-        
+
         public static void RemoveLast<T>(this IList<T> list)
         {
             list.RemoveAt(list.Count - 1);
         }
-
     }
 }

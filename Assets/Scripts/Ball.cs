@@ -34,7 +34,9 @@ public class Ball : MonoBehaviour
         SoundManager.instance.PlayBallJump();
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+        yield return new WaitForEndOfFrame();
+        rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
+        yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(0.25f);
         isJumping = false;
     }

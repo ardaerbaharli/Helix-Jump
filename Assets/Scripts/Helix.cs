@@ -15,11 +15,11 @@ public class Helix : MonoBehaviour
         transform.Rotate(euler);
     }
 
-    public void BlowUp()
+    public void BlowUp(bool isSuperSpeed = false)
     {
         if (didBlewUp) return;
         didBlewUp = true;
-        helixParts.ForEach(x => x.BlowUp());
+        helixParts.ForEach(x => x.BlowUp(isSuperSpeed));
     }
 
     public void SelfDestroy()

@@ -1,10 +1,16 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Extensions;
 using ScriptableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelDesign : MonoBehaviour
 {
-    [SerializeField] private int numberOfThemes;
+    [SerializeField] private int changeThemeEveryLevels;
+
     [SerializeField] private bool overrideTheme;
     [SerializeField] private int overrideThemeIndex;
 
@@ -18,7 +24,8 @@ public class LevelDesign : MonoBehaviour
     [SerializeField] private Material helix;
     [SerializeField] private Material skybox;
 
-    private Theme theme;
+    private Queue<Theme> themes;
+    private Theme currentTheme;
     public static LevelDesign instance;
     private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
@@ -26,26 +33,70 @@ public class LevelDesign : MonoBehaviour
     {
         instance = this;
 
-        var themeIndex = Random.Range(0, numberOfThemes);
+        themes = Resources.LoadAll<Theme>("Themes").ToList().OrderBy(x => Random.value).ToQueue();
+
         if (overrideTheme)
-            themeIndex = overrideThemeIndex;
-        var themeName = "Theme" + themeIndex;
-        theme = Resources.Load<Theme>("Themes/" + themeName);
+        {
+            var themeIndex = overrideThemeIndex;
+            currentTheme = Resources.Load<Theme>($"Themes/Theme+{themeIndex}");
+            themes.Dequeue(currentTheme);
+        }
+        else
+            currentTheme = themes.Dequeue();
 
-        ball.Lerp(ball, theme.ball, 1);
-        ballTrail.Lerp(ballSuperSpeed, theme.ballTrail, 1);
-        ballTrail.SetColor(EmissionColor, theme.ballTrail.GetColor(EmissionColor));
-        ballTrail.EnableKeyword("_EMISSION");
+        themes.Enqueue(currentTheme);
+        StartCoroutine(LoadCurrentTheme());
+    }
 
-        ballSuperSpeed.Lerp(ball, theme.ballSuperSpeed, 1);
-        ballTrailSuperSpeed.Lerp(ballTrailSuperSpeed, theme.ballTrailSuperSpeed, 1);
-        ballTrailSuperSpeed.SetColor(EmissionColor, theme.ballTrailSuperSpeed.GetColor(EmissionColor));
-        ballTrailSuperSpeed.EnableKeyword("_EMISSION");
 
-        pole.Lerp(pole, theme.pole, 1);
-        helix.Lerp(helix, theme.helix, 1);
-        skybox.Lerp(skybox, theme.skybox, 1);
-        ballLight.color = theme.ballLightColor;
+    private void Start()
+    {
+        ScoreManager.instance.OnScored += OnScored;
+    }
+
+    private void OnScored(int score)
+    {
+        if (score % changeThemeEveryLevels == 0)
+            FadeToNextTheme();
+    }
+
+    private IEnumerator LoadCurrentTheme()
+    {
+        var ballTrailTargetEmissionColor = currentTheme.ballTrail.GetColor(EmissionColor);
+        var ballTrailSuperSpeedTargetEmissionColor = currentTheme.ballTrailSuperSpeed.GetColor(EmissionColor);
+        var time = 1f;
+        var deltaTime = 0f;
+        while (deltaTime < 1)
+        {
+            deltaTime += Time.deltaTime / time;
+            ball.Lerp(ball, currentTheme.ball, deltaTime);
+            ballTrail.Lerp(ballSuperSpeed, currentTheme.ballTrail, deltaTime);
+
+            ballTrail.EnableKeyword("_EMISSION");
+            var ballTrailColor = Color.Lerp(ballTrail.GetColor(EmissionColor), ballTrailTargetEmissionColor, deltaTime);
+            ballTrail.SetColor(EmissionColor, ballTrailColor);
+
+            ballSuperSpeed.Lerp(ball, currentTheme.ballSuperSpeed, deltaTime);
+            ballTrailSuperSpeed.Lerp(ballTrailSuperSpeed, currentTheme.ballTrailSuperSpeed, deltaTime);
+
+            ballTrailSuperSpeed.EnableKeyword("_EMISSION");
+            var ballTrailSuperSpeedColor = Color.Lerp(ballTrailSuperSpeed.GetColor(EmissionColor),
+                ballTrailSuperSpeedTargetEmissionColor, deltaTime);
+            ballTrailSuperSpeed.SetColor(EmissionColor, ballTrailSuperSpeedColor);
+
+            pole.Lerp(pole, currentTheme.pole, deltaTime);
+            helix.Lerp(helix, currentTheme.helix, deltaTime);
+            skybox.Lerp(skybox, currentTheme.skybox, deltaTime);
+            ballLight.color = Color.Lerp(ballLight.color, currentTheme.ballLightColor, deltaTime);
+            yield return null;
+        }
+    }
+
+    public void FadeToNextTheme()
+    {
+        currentTheme = themes.Dequeue();
+        themes.Enqueue(currentTheme);
+        StartCoroutine(LoadCurrentTheme());
     }
 
 
@@ -55,7 +106,7 @@ public class LevelDesign : MonoBehaviour
         {
             isSuperSpeedOn ? ballSuperSpeed : ball,
             isSuperSpeedOn ? ballTrailSuperSpeed : ballTrail,
-            isSuperSpeedOn ? theme.ballLightColorSuperSpeed : theme.ballLightColor
+            isSuperSpeedOn ? currentTheme.ballLightColorSuperSpeed : currentTheme.ballLightColor
         };
     }
 }

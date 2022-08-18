@@ -18,6 +18,6 @@ MonoBehaviour:
   ballTrailSuperSpeed: {fileID: 2100000, guid: 5f9eaae6857e048439bbe2f0e59ad813, type: 2}
   pole: {fileID: 2100000, guid: 3478aa21a7c42497bbba79946660d073, type: 2}
   helix: {fileID: 2100000, guid: 9b15fedcda4f24f5c8a53933683e7dbb, type: 2}
-  skybox: {fileID: 2100000, guid: 9f14322dd5b664f1fad3fd89ddcbab67, type: 2}
-  ballLightColor: {r: 0.17022514, g: 1, b: 0, a: 1}
-  ballLightColorSuperSpeed: {r: 1, g: 0, b: 0, a: 1}
+  skybox: {fileID: 2100000, guid: c072f936d34704d399ba34206fb355e2, type: 2}
+  ballLightColor: {r: 1, g: 0.7764142, b: 0, a: 1}
+  ballLightColorSuperSpeed: {r: 0.9433962, g: 0.29262275, b: 0.14684942, a: 1}
