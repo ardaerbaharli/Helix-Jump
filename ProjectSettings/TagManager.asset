@@ -7,6 +7,9 @@ TagManager:
   - Ball
   - HelixPart
   - Helix
+  - Hoop
+  - Circle
+  - test
   layers:
   - Default
   - TransparentFX

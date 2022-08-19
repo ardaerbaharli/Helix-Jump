@@ -1,36 +1,49 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
     [SerializeField] private float jumpSpeed;
-    [SerializeField] private MeshRenderer ballRenderer;
-    [SerializeField] private TrailRenderer trailRenderer;
-    [SerializeField] private Light light;
 
-    public bool didTouchGroundAfterScoring;
-    public int lastTouchedLevel;
-    private bool isSuperSpeed;
+
     private Rigidbody rb;
     private bool isJumping;
 
-    private void Awake()
+    private void OnEnable()
     {
         rb = GetComponent<Rigidbody>();
     }
-    
 
-    public void ToggleSuperSpeed(bool value)
+    private void Start()
     {
-        isSuperSpeed = value;
-        var mats = LevelDesign.instance.GetBallMaterials(value);
-        ballRenderer.material = (Material) mats[0];
-        trailRenderer.material = (Material) mats[1];
-        light.color = (Color) mats[2];
+        GameManager.instance.OnGameOver += Stop;
+        GameManager.instance.OnPlayerContinuesPlaying += Continue;
     }
+
+    private void Continue()
+    {
+        rb.useGravity = true;
+    }
+
+    private void Stop()
+    {
+        if (rb == null)
+        {
+            print("ball rb null");
+            rb = GetComponent<Rigidbody>();
+        }
+
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
 
     private IEnumerator Jump()
     {
+        if (isJumping) yield break;
+        isJumping = true;
         SoundManager.instance.PlayBallJump();
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -41,27 +54,40 @@ public class Ball : MonoBehaviour
         isJumping = false;
     }
 
+    private bool didScore;
 
     private void OnTriggerEnter(Collider c)
     {
-        if (c.transform.parent.CompareTag("HelixPart") && !isJumping)
+        if (c.transform.CompareTag("Hoop"))
         {
-            isJumping = true;
-            didTouchGroundAfterScoring = true;
-            lastTouchedLevel = ScoreManager.instance.Score;
+            if (didScore) return;
+            print("hoop");
+            didScore = true;
+            ScoreManager.instance.Score++;
+        }
+        else if (c.transform.CompareTag("Circle"))
+        {
+            if (didScore) return;
 
+            print("circle");
             StartCoroutine(Jump());
-
-            if (isSuperSpeed)
-            {
-                ToggleSuperSpeed(false);
-                GameManager.instance.SuperSpeedCollision();
-            }
         }
         else if (c.transform.CompareTag("Helix"))
         {
-            didTouchGroundAfterScoring = false;
-            ScoreManager.instance.Score++;
+            if (didScore)
+            {
+                didScore = false;
+                return;
+            }
+            print("helix");
+
+            GameManager.instance.GameOver();
+        }
+        else if (c.transform.parent.CompareTag("HelixPart"))
+        {
+            StartCoroutine(Jump());
         }
     }
+
+   
 }

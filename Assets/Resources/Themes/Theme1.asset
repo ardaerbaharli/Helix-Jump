@@ -12,12 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe4313b71c14259b1a1f33e5dc612cc, type: 3}
   m_Name: Theme1
   m_EditorClassIdentifier: 
-  ball: {fileID: 2100000, guid: 6a7d30f2bb1db46ed9c5afe52808fe03, type: 2}
-  ballTrail: {fileID: 2100000, guid: e2f72e599571f4fa7b7268cdd86dda32, type: 2}
-  ballSuperSpeed: {fileID: 2100000, guid: db5c7b15dc9ad46f895afa436f9bc361, type: 2}
-  ballTrailSuperSpeed: {fileID: 2100000, guid: 646f53894827446f5ad06f4894ec019b, type: 2}
-  pole: {fileID: 2100000, guid: 09a89bbd6fa554a61b88dfef78d1f7cc, type: 2}
-  helix: {fileID: 2100000, guid: 00b52d11e4a044a0b801937239636cc1, type: 2}
-  skybox: {fileID: 2100000, guid: 540a9810917a147b7ba5596fb190b631, type: 2}
-  ballLightColor: {r: 0.7924528, g: 0.34765673, b: 0.17568529, a: 1}
-  ballLightColorSuperSpeed: {r: 0.94509804, g: 0.29411766, b: 0.14509805, a: 1}
+  pole: {fileID: 2100000, guid: 78969708a39c146188d6c9e414b458f3, type: 2}
+  helix: {fileID: 2100000, guid: 08def1737a7ba49db8239a70d7d44010, type: 2}
+  skybox: {fileID: 2100000, guid: 08014d084bd274f87aae6866505387f7, type: 2}

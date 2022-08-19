@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 378709574656115757}
   m_Layer: 0
   m_Name: Soccer Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,9 +115,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpSpeed: 5
-  ballRenderer: {fileID: 0}
-  trailRenderer: {fileID: 0}
-  light: {fileID: 0}
+  trail: {fileID: 2100000, guid: d3fdab627b2f748058c42a9d354bb0c7, type: 2}
+  trailSuperSpeed: {fileID: 2100000, guid: 4ec27149b6b234f539aa53542f5db920, type: 2}
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  lightSuperSpeedColor: {r: 1, g: 0, b: 0, a: 1}
   didTouchGroundAfterScoring: 0
   lastTouchedLevel: 0
 --- !u!54 &3428958818449830678
@@ -157,7 +158,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ccd10756305c24fd98ff647a6ca977ba, type: 2}
+  - {fileID: 2100000, guid: d3fdab627b2f748058c42a9d354bb0c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

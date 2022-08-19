@@ -6,6 +6,7 @@ namespace Utilities
         private static readonly string SoundPref = "Sound";
         public static readonly string HighScorePref = "HighScore";
 
+        public static int DeathCount;
         public static bool IsVibrationOn
         {
             get => PlayerPrefsX.GetBool(VibrationPref, true);
@@ -17,5 +18,6 @@ namespace Utilities
             get => PlayerPrefsX.GetBool(SoundPref, true);
             set => PlayerPrefsX.SetBool(SoundPref, value);
         }
+        
     }
 }

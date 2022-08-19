@@ -1,4 +1,5 @@
 using System;
+using Ads;
 using Enums;
 using TMPro;
 using UnityEngine;
@@ -7,24 +8,23 @@ namespace UI
 {
     public class GamePanel : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private GameObject adPrompt;
 
         private void Start()
         {
-            ScoreManager.instance.OnScored += OnScored;
             GameManager.instance.OnGameOver += OnGameOver;
         }
 
         private void OnDestroy()
         {
-            ScoreManager.instance.OnScored -= OnScored;
             GameManager.instance.OnGameOver -= OnGameOver;
         }
 
         private void OnGameOver()
         {
-            adPrompt.SetActive(true);
+            if (AdManager.instance.isAdsActive)
+                adPrompt.SetActive(true);
+            else EndGame();
         }
 
         public void ShowAd()
@@ -39,10 +39,6 @@ namespace UI
             GameManager.instance.EndGame();
         }
 
-        private void OnScored(int score)
-        {
-            scoreText.text = score.ToString();
-        }
 
         public void Pause()
         {

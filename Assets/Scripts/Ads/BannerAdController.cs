@@ -13,7 +13,7 @@ public class BannerAdController : MonoBehaviour
 
     public Action OnAdLoaded;
 
-    void Start()
+   public void Initialize()
     {
         // Get the Ad Unit ID for the current platform:
 #if UNITY_IOS
@@ -43,21 +43,21 @@ public class BannerAdController : MonoBehaviour
     // Implement code to execute when the loadCallback event triggers:
     private void OnBannerLoaded()
     {
-        Debug.Log("Banner loaded");
+        // Debug.Log("Banner loaded");
         OnAdLoaded?.Invoke();
     }
 
     // Implement code to execute when the load errorCallback event triggers:
     void OnBannerError(string message)
     {
-        Debug.Log($"Banner Error: {message}");
+        // Debug.Log($"Banner Error: {message}");
         // Optionally execute additional code, such as attempting to load another ad.
     }
 
     // Implement a method to call when the Show Banner button is clicked:
     public void ShowAd()
     {
-        print("Showing bannnr ad");
+        // print("Showing bannnr ad");
         // Set up options to notify the SDK of show events:
         BannerOptions options = new BannerOptions
         {

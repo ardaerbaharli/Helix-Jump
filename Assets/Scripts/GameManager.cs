@@ -6,16 +6,15 @@ using Utilities;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Ball ball;
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private PlayerController playerController;
-    [SerializeField] private CameraController cameraController;
 
-    private int deathCount;
+
     public Action OnGameOver;
-
     public Action OnPlayerContinuesPlaying;
-    private Helix previousHelix, prePreviousHelix, nextHelix;
+    public Action OnRewardedAdCompleted;
+
+    private Helix previousHelix, prePreviousHelix;
     public static GameManager instance;
     public GameState State { get; set; }
 
@@ -24,12 +23,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = 30;
-        deathCount = 0;
-
+        Config.DeathCount = 0;
+        Time.timeScale = 1;
+        
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -46,8 +45,8 @@ public class GameManager : MonoBehaviour
     {
         State = GameState.Menu;
         ScoreManager.instance.OnScored += OnScored;
+        AdManager.instance.OnRewardedAdCompleted += OnRewardedAdCompletedCallback;
     }
-
 
 
     private void OnScored(int score)
@@ -57,22 +56,10 @@ public class GameManager : MonoBehaviour
 
         Vibration.Light();
 
-        if (superSpeedCollisionHappened)
-        {
-            superSpeedCollisionHappened = false;
-            cameraController.isPassiveSpeedOn = true;
-        }
-
-        if (score - ball.lastTouchedLevel >= 3)
-        {
-            ball.ToggleSuperSpeed(true);
-        }
-
-        playerController.activeHelix.BlowUp();
-
         if (prePreviousHelix != null)
             prePreviousHelix.SelfDestroy();
 
+        playerController.activeHelix.DeactivateColliders();
         prePreviousHelix = previousHelix;
         previousHelix = playerController.activeHelix;
         playerController.activeHelix = levelManager.ActiveHelix;
@@ -80,57 +67,48 @@ public class GameManager : MonoBehaviour
         levelManager.LoadLevel();
     }
 
-    private bool superSpeedCollisionHappened = false;
-
-    public void SuperSpeedCollision()
-    {
-        SoundManager.instance.PlayHelixBreak();
-        playerController.activeHelix.BlowUp(true);
-        superSpeedCollisionHappened = true;
-        cameraController.isPassiveSpeedOn = false;
-    }
 
     public void GameOver()
     {
-        print("game over");
         State = GameState.GameOver;
-        deathCount++;
+        Config.DeathCount++;
         OnGameOver?.Invoke();
     }
 
 
     public void Resume()
     {
-        State = GameState.Playing;
         Time.timeScale = 1;
+        State = GameState.Playing;
     }
 
     public void Pause()
     {
-        State = GameState.Paused;
         Time.timeScale = 0;
+        State = GameState.Paused;
     }
 
     public void KeepPlaying()
     {
         AdManager.instance.ShowRewardedAd();
-        AdManager.instance.OnRewardedAdCompleted += OnRewardedAdCompleted;
     }
 
-    private void OnRewardedAdCompleted()
+    private void OnRewardedAdCompletedCallback()
     {
-        OnPlayerContinuesPlaying?.Invoke();
+        OnRewardedAdCompleted?.Invoke();
     }
 
     public void CameraMoveFinished()
     {
         State = GameState.Playing;
+        ScoreManager.instance.Score++;
+        OnPlayerContinuesPlaying?.Invoke();
     }
 
     public void EndGame()
     {
-        print(deathCount % 5 == 0);
-        if (deathCount % 5 == 0) AdManager.instance.ShowInterstitialAd();
+        State = GameState.GameOver;
+        if (Config.DeathCount % 5 == 0) AdManager.instance.ShowInterstitialAd();
         PageController.Instance.ShowPage(Pages.GameOver);
     }
 }

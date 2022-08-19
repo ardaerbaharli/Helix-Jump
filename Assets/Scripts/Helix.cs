@@ -1,33 +1,32 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
 public class Helix : MonoBehaviour
 {
-    public List<HelixPart> helixParts;
     public PooledObject pooledObject;
-    public bool didBlewUp;
+    public List<Hoop> hoops;
+    public bool isInitialLevel;
 
     public void Rotate(Vector3 euler)
     {
         transform.Rotate(euler);
     }
 
-    public void BlowUp(bool isSuperSpeed = false)
-    {
-        if (didBlewUp) return;
-        didBlewUp = true;
-        helixParts.ForEach(x => x.BlowUp(isSuperSpeed));
-    }
-
     public void SelfDestroy()
     {
-        didBlewUp = false;
+        if (isInitialLevel)
+            Destroy(gameObject);
+        else
+        {
+            hoops.ForEach(x => x.SelfDestroy());
+            ObjectPool.instance.TakeBack(pooledObject);
+        }
+    }
 
-        helixParts.ForEach(x => x.SelfDestroy());
-
-        ObjectPool.instance.TakeBack(pooledObject);
+    public void DeactivateColliders()
+    {
+        return;
+            hoops.ForEach(x => x.DeactivateColliders());
     }
 }

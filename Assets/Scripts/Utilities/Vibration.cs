@@ -6,6 +6,7 @@ namespace Utilities
     {
         public static void Light()
         {
+            if(!Config.IsVibrationOn) return;
 #if UNITY_IOS
             VibrateIos(iOSHapticFeedback.iOSFeedbackType.ImpactLight);
 #elif UNITY_ANDROID

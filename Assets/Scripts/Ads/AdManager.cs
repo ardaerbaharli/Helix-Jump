@@ -5,6 +5,8 @@ namespace Ads
 {
     public class AdManager : MonoBehaviour
     {
+        public bool isAdsActive;
+
         private AdsInitializer adsInitializer;
         private BannerAdController bannerAdController;
         private InterstitialAdController interstitialAdController;
@@ -30,15 +32,22 @@ namespace Ads
                 Destroy(gameObject);
             }
 
+            if (!isAdsActive) return;
+
             adsInitializer = GetComponent<AdsInitializer>();
             bannerAdController = GetComponent<BannerAdController>();
             interstitialAdController = GetComponent<InterstitialAdController>();
             rewardedAdController = GetComponent<RewardedAdController>();
 
-            adsInitializer.OnAdsInitialized += OnAdsInitialized;
+            adsInitializer.InitializeAds();
+            bannerAdController.Initialize();
+            interstitialAdController.Initialize();
+            rewardedAdController.Initialize();
+
+            adsInitializer.OnUnityAdsInitialized += OnUnityAdsInitialized;
         }
 
-        private void OnAdsInitialized()
+        private void OnUnityAdsInitialized()
         {
             bannerAdController.LoadAd();
             bannerAdController.OnAdLoaded += OnBannerAdLoaded;

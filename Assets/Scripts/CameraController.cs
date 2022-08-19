@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Enums;
 using UnityEngine;
 using Utilities;
@@ -22,21 +24,41 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         ScoreManager.instance.OnScored += OnScored;
-        GameManager.instance.OnPlayerContinuesPlaying += OnPlayerContinuesPlaying;
+        GameManager.instance.OnRewardedAdCompleted += OnRewardedAdCompletedCallback;
     }
 
-    private void OnPlayerContinuesPlaying()
+    private void OnDestroy()
     {
-        MoveTheCameraToBall();
+        ScoreManager.instance.OnScored -= OnScored;
+        GameManager.instance.OnRewardedAdCompleted -= OnRewardedAdCompletedCallback;
     }
 
-    private void MoveTheCameraToBall()
+    private void OnRewardedAdCompletedCallback()
+    {
+        StartCoroutine(MoveTheCameraToBall());
+    }
+
+    private IEnumerator MoveTheCameraToBall()
     {
         var targetPosY = ball.transform.position.y + offsetY;
         var targetPos = new Vector3(transform.position.x, targetPosY, transform.position.z);
-        ArdaTween.MoveTo(gameObject, ArdaTween.Hash("targetPosition", targetPos,
-            "duration", 1f, "onComplete", "CameraMoveFinished"));
+
+
+        var duration = 1f;
+
+
+        var startPosition = transform.position;
+        var t1 = 0f;
+        while (t1 < duration)
+        {
+            t1 += Time.deltaTime;
+            transform.position = Vector3.Lerp(startPosition, targetPos, t1 / duration);
+            yield return null;
+        }
+
+        CameraMoveFinished();
     }
+
 
     // Gets called by ArdaTween when the camera has finished moving to the ball
     public void CameraMoveFinished()

@@ -11,16 +11,12 @@ namespace Ads
         [SerializeField] bool _testMode = true;
         private string _gameId;
 
-        public Action OnAdsInitialized;
+        public Action OnUnityAdsInitialized;
 
-        void Awake()
-        {
-            InitializeAds();
-        }
+       
 
         public void InitializeAds()
         {
-            print(Application.platform);
             _gameId = (Application.platform == RuntimePlatform.Android)
                 ? _androidGameId
                 : _iOSGameId;
@@ -29,13 +25,13 @@ namespace Ads
 
         public void OnInitializationComplete()
         {
-            Debug.Log("Unity Ads initialization complete.");
-            OnAdsInitialized?.Invoke();
+            // Debug.Log("Unity Ads initialization complete.");
+            OnUnityAdsInitialized?.Invoke();
         }
 
         public void OnInitializationFailed(UnityAdsInitializationError error, string message)
         {
-            Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+            // Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
         }
     }
 }

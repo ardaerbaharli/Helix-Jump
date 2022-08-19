@@ -7,7 +7,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioMixer mixer;
 
     [SerializeField] private AudioSource ballJump;
-    [SerializeField] private AudioSource helixBreak;
     [SerializeField] private AudioSource uiClick;
 
     public static SoundManager instance;
@@ -39,11 +38,6 @@ public class SoundManager : MonoBehaviour
     public void PlayBallJump()
     {
         ballJump.Play();
-    }
-
-    public void PlayHelixBreak()
-    {
-        helixBreak.Play();
     }
 
     public void PlayUiClick()

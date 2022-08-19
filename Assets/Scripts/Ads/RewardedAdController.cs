@@ -13,7 +13,7 @@ public class RewardedAdController : MonoBehaviour, IUnityAdsLoadListener, IUnity
     public Action OnAdLoaded;
     public Action OnCompleted;
 
-    void Awake()
+  public  void Initialize()
     {
         // Get the Ad Unit ID for the current platform:
 #if UNITY_IOS
@@ -27,21 +27,21 @@ public class RewardedAdController : MonoBehaviour, IUnityAdsLoadListener, IUnity
     public void LoadAd()
     {
         // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
-        Debug.Log("Loading Ad: " + _adUnitId);
+        // Debug.Log("Loading Ad: " + _adUnitId);
         Advertisement.Load(_adUnitId, this);
     }
 
     // If the ad successfully loads, add a listener to the button and enable it:
     public void OnUnityAdsAdLoaded(string adUnitId)
     {
-        Debug.Log("Ad Loaded: " + adUnitId);
+        // Debug.Log("Ad Loaded: " + adUnitId);
         OnAdLoaded?.Invoke();
     }
 
     // Implement a method to execute when the user clicks the button:
     public void ShowAd()
     {
-        print("Showing rewarded ad");
+        // print("Showing rewarded ad");
         // Then show the ad:
         Advertisement.Show(_adUnitId, this);
     }
@@ -51,7 +51,7 @@ public class RewardedAdController : MonoBehaviour, IUnityAdsLoadListener, IUnity
     {
         if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
         {
-            Debug.Log("Unity Ads Rewarded Ad Completed");
+            // Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
             OnCompleted?.Invoke();
             // Load another ad:
@@ -62,13 +62,13 @@ public class RewardedAdController : MonoBehaviour, IUnityAdsLoadListener, IUnity
     // Implement Load and Show Listener error callbacks:
     public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
     {
-        Debug.Log($"Error loading Ad Unit {adUnitId}: {error.ToString()} - {message}");
+        // Debug.Log($"Error loading Ad Unit {adUnitId}: {error.ToString()} - {message}");
         // Use the error details to determine whether to try to load another ad.
     }
 
     public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
     {
-        Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
+        // Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
         // Use the error details to determine whether to try to load another ad.
     }
 

@@ -46,21 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144a2940aab14363a88cc6930c9d2091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  helixParts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   pooledObject:
     name: levelParent
     gameObject: {fileID: 2292179651505938084}
     transform: {fileID: 2292179651505938085}
     rigidbody: {fileID: 0}
+    poolName: 
+  hoops: []
+  isInitialLevel: 0
 --- !u!65 &2292179651505938086
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -72,8 +65,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.58, y: 0.11, z: 0.58}
-  m_Center: {x: 0, y: -0.16, z: 0}
+  m_Size: {x: 0.58, y: 0.05, z: 0.58}
+  m_Center: {x: 0, y: -0.186, z: 0}
 --- !u!1001 &4810943240312134206
 PrefabInstance:
   m_ObjectHideFlags: 0

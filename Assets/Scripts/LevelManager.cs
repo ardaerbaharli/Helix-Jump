@@ -8,6 +8,8 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
 
+    [SerializeField] private Helix initialLevel;
+    
     [SerializeField] private int numberOfInitialLevels;
     [SerializeField] private float yDif;
     [SerializeField] private Ball ball;
@@ -24,42 +26,15 @@ public class LevelManager : MonoBehaviour
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => ObjectPool.instance.isPoolSet);
-        LoadFirstLevel();
+        
+        levelIndex++;
+        levels.Add(initialLevel);
+        
         LoadInitialLevels();
+        
         ball.GameObject().SetActive(true);
     }
 
-    private void LoadFirstLevel()
-    {
-        var levelParent = ObjectPool.instance.GetPooledObject("levelParent");
-        levelParent.gameObject.name = "Level" + (levelIndex + 1);
-        var levelPos = Vector3.zero + new Vector3(0, yDif * levelIndex, 0);
-        var helix = levelParent.gameObject.GetComponent<Helix>();
-        helix.helixParts = new List<HelixPart>();
-        helix.pooledObject = levelParent;
-        levelParent.transform.position = levelPos;
-
-        var numberOfParts = 10;
-        var angles = new List<float> {0, 30, 60, 90, 120, 150, 180, 210, 240, 270};
-        var angle = Vector3.zero;
-
-        for (var i = 0; i < numberOfParts; i++)
-        {
-            angle.y = angles[i];
-            var part = ObjectPool.instance.GetPooledObject("helix-part");
-            part.transform.position = levelPos;
-            part.transform.rotation = Quaternion.Euler(angle);
-            part.transform.parent = levelParent.transform;
-            part.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-
-            var helixPart = part.gameObject.GetComponent<HelixPart>();
-            helixPart.pooledObject = part;
-            helix.helixParts.Add(helixPart);
-        }
-
-        levelIndex++;
-        levels.Add(helix);
-    }
 
     private void LoadInitialLevels()
     {
@@ -75,26 +50,27 @@ public class LevelManager : MonoBehaviour
         levelParent.gameObject.name = "Level" + (levelIndex + 1);
         var levelPos = Vector3.zero + new Vector3(0, yDif * levelIndex, 0);
         var helix = levelParent.gameObject.GetComponent<Helix>();
-        helix.helixParts = new List<HelixPart>();
+        helix.hoops = new List<Hoop>();
         helix.pooledObject = levelParent;
         levelParent.transform.position = levelPos;
 
-        var numberOfParts = Random.Range(7, 10);
+        var numberOfParts = Random.Range(2, 7);
         var angles = GetAngles(numberOfParts);
         var angle = Vector3.zero;
 
         for (var i = 0; i < numberOfParts; i++)
         {
             angle.y = angles[i];
-            var part = ObjectPool.instance.GetPooledObject("helix-part");
-            part.transform.position = levelPos;
-            part.transform.rotation = Quaternion.Euler(angle);
-            part.transform.parent = levelParent.transform;
-            part.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            var hoop = ObjectPool.instance.GetPooledObject("hoop");
+            hoop.transform.position = levelPos;
+            hoop.transform.rotation = Quaternion.Euler(angle);
+            hoop.transform.parent = levelParent.transform;
+            hoop.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 
-            var helixPart = part.gameObject.GetComponent<HelixPart>();
-            helixPart.pooledObject = part;
-            helix.helixParts.Add(helixPart);
+            // var helixPart = part.gameObject.GetComponent<HelixPart>();
+            var hoopController = hoop.gameObject.GetComponent<Hoop>();
+            hoopController.pooledObject = hoop;
+            helix.hoops.Add(hoopController);
         }
 
         levelIndex++;
@@ -103,7 +79,7 @@ public class LevelManager : MonoBehaviour
 
 
     //TODO fix this
-    private readonly List<float> ANGLES = new() {0, 30f, 60f, 90f, 120f, 150f, 180f, 210f, 240f, 270f, 300f, 330f};
+    private readonly List<float> ANGLES = new() {0, 45f, 90f, 135f, 180f, 225f, 270f, 315f};
 
     private List<float> GetAngles(int numberOfParts)
     {

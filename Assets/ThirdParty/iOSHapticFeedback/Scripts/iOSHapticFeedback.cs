@@ -154,7 +154,7 @@ public class iOSHapticFeedback : MonoBehaviour {
         _releaseFeedbackGenerator(id);
     }
 
-    public bool debug = true;
+    public bool debug = false;
 
     public enum iOSFeedbackType { SelectionChange, ImpactLight, ImpactMedium, ImpactHeavy, Success, Warning, Failure, None};
 

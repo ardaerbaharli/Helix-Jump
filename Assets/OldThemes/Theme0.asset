@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe4313b71c14259b1a1f33e5dc612cc, type: 3}
+  m_Name: Theme0
+  m_EditorClassIdentifier: 
+  ball: {fileID: 2100000, guid: fc71e35304b5e4d9db2f337a1dbd3f10, type: 2}
+  ballTrail: {fileID: 2100000, guid: c3f4cb35e4a6048d8aeb779d56bb12ad, type: 2}
+  ballSuperSpeed: {fileID: 2100000, guid: 8fa469049b55748f482d9ebf79a7dbd2, type: 2}
+  ballTrailSuperSpeed: {fileID: 2100000, guid: 72e4d4b6cd941441ca0a7d273ac854dc, type: 2}
+  pole: {fileID: 2100000, guid: 19a58d2ddb42b4eddb3cfafa5d4c955b, type: 2}
+  helix: {fileID: 2100000, guid: b0309f7c42af546429c40be67de91708, type: 2}
+  skybox: {fileID: 2100000, guid: d6a60392ee8b640d383b23f4779b2163, type: 2}
+  ballLightColor: {r: 1, g: 0.7764142, b: 0, a: 1}
+  ballLightColorSuperSpeed: {r: 0.9433962, g: 0.29262275, b: 0.14684942, a: 1}
